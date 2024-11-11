@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: false
+  tasks:
+    - name: Display parsed parameters
+      debug:
+        msg: 
+          - "Param1: {{ ansible_facts.parsed_results.param1 }}"
+          - "Param2: {{ ansible_facts.parsed_results.param2 }}"
+          - "Param3: {{ ansible_facts.parsed_results.param3 }}"
