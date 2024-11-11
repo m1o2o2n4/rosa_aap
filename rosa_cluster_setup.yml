@@ -5,6 +5,6 @@
     - name: Display parsed parameters
       debug:
         msg: 
-          - "Param1: {{ ansible_facts.parsed_results.param1 }}"
-          - "Param2: {{ ansible_facts.parsed_results.param2 }}"
-          - "Param3: {{ ansible_facts.parsed_results.param3 }}"
+          - "Param1: {{ ansible_facts.param1 }}"
+          - "Param2: {{ ansible_facts.param2 }}"
+          - "Param3: {{ ansible_facts.param3 }}"
