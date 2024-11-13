@@ -5,11 +5,11 @@
       uri:
         url: "https://prod-11.southeastasia.logic.azure.com:443/workflows/9717b9afb76c4e04ba52d87cce1135aa/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkiaRgNztIRrnrOMIjQfaT43Vz9dwYnfbpyrYl7Sy3E"
         method: POST
+        status_code: 202
         body_format: "json"
         body:
           message: "message"
       register: result
-
     - name: debug
       ansible.builtin.debug:
         var: result
