@@ -9,7 +9,7 @@
 
     - name: Parse JSON output
       set_fact:
-        result: "{{ s_result.stdout | from_json }}"
+        result: "{{ s_result.stdout_lines[-1] | from_json }}"
 
     - name: debug
       ansible.builtin.debug:
