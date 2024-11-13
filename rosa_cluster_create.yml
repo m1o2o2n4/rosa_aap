@@ -1,15 +1,19 @@
 ---
-- name: Setup rosa cluster from a ansible playbook.
+- name: ROSA Cluster Create
   hosts: localhost
   gather_facts: false
   tasks:
     - name: Execute script
       command: /home/runner/rosa.sh
-      register: script_result
+      register: s_result
 
     - name: Parse JSON output
       set_fact:
-        result: "{{ script_result.stdout | from_json }}"
+        result: "{{ s_result.stdout | from_json }}"
+
+    - name: debug
+      ansible.builtin.debug:
+        var: result
 
     - name: Parse JSON output to variables
       set_stats:
@@ -27,9 +31,10 @@
         status_code: 202
         body:
           title: "[STEP2] ROSAクラスタ作成完了"
-          message: "[STEP2] ROSAクラスタ作成完了"
-      register: result
+          message: "ROSA"
+          api_url: "{{ result.api_url }}"
+          console_url: "{{ result.console_url }}"
+          username: "{{ result.username }}"
+          password: "{{ result.password }}"
+      register: o_result
 
-    - name: debug
-      ansible.builtin.debug:
-        var: result

@@ -2,32 +2,20 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Display parsed parameters
-      debug:
-        msg: 
-          - "api_url: {{ api_url }}"
-          - "console_url: {{ console_url }}"
-          - "username: {{ username }}"
-          - "password: {{ password }}"
-
     - name: Parse JSON output to variables
       set_stats:
         data:
-          api_url: "{{ api_url }}"
-          console_url: "{{ console_url }}"
-          username: "{{ username }}"
-          password: "{{ password }}"
+          api_url: "api_url"
+          console_url: "console_url"
+          username: "username"
+          password: "password"
 
     - name: Notify to Teams
       uri:
-        url: "https://prod-11.southeastasia.logic.azure.com:443/workflows/9717b9afb76c4e04ba52d87cce1135aa/trig[…]&sig=OkiaRgNztIRrnrOMIjQfaT43Vz9dwYnfbpyrYl7Sy3E"
+        url: "https://prod-63.southeastasia.logic.azure.com:443/workflows/5fccc786ff304019a64ec9949c6a0d95/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LChi9A1c3aexboQI_yjMekJTdSRZR2JM758fM6oKcZQ"
         method: POST
         body_format: "json"
+        status_code: 202
         body:
-          title: "[STEP2] ROSAクラスタ作成完了"
-          message: "ROSAクラスタ作成が完了しました。"
-          api_url: "{{ api_url }}"
-          console_url: "{{ console_url }}"
-          username: "{{ username }}"
-          password: "{{ password }}"
+          message: "message"
       register: result
