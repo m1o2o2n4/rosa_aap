@@ -1,15 +1,35 @@
 ---
 - name: Setup rosa cluster from a ansible playbook.
-  hosts: all
+  hosts: localhost
   gather_facts: false
   tasks:
-    - name: Execute script and parse JSON output
-      command: echo '{"param1":"value1","param2":"value2","param3":"value3"}'
-      register: result
+    - name: Execute script
+      command: /home/runner/rosa.sh
+      register: script_result
 
-    - name: Parse JSON output to variables2
+    - name: Parse JSON output
+      set_fact:
+        result: "{{ script_result.stdout | from_json }}"
+
+    - name: Parse JSON output to variables
       set_stats:
         data:
-          param1: "1"
-          param2: "2"
-          param3: "3"
+          api_url: "{{ result.api_url }}"
+          console_url: "{{ result.console_url }}"
+          username: "{{ result.username }}"
+          password: "{{ result.password }}"
+
+    - name: Notify to Teams
+      uri:
+        url: "https://prod-11.southeastasia.logic.azure.com/workflows/9717b9afb76c4e04ba52d87cce1135aa/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OkiaRgNztIRrnrOMIjQfaT43Vz9dwYnfbpyrYl7Sy3E"
+        method: POST
+        body_format: "json"
+        status_code: 202
+        body:
+          title: "[STEP2] ROSAクラスタ作成完了"
+          message: "[STEP2] ROSAクラスタ作成完了"
+      register: result
+
+    - name: debug
+      ansible.builtin.debug:
+        var: result
