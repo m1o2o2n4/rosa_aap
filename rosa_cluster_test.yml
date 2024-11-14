@@ -7,11 +7,33 @@
           api_url: "{{ api_url }}"
           api_token: "{{ api_token }}"
 
-    - name: Parse JSON output to variables
-      set_stats:
-        data:
-          api_url: "{{ api_url }}"
-          api_token: "{{ api_token }}"
+    - name: Get cluster version
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: ClusterVersion
+        name: version
+        host: "{{ api_url }}"
+        api_key: "{{ api_token }}"
+      register: cluster_version_info
+
+    - name: Assert cluster version
+      ansible.builtin.assert:
+        that:
+          - cluster_version_info.resources[0].status.history[0].version == '4.15.37'
+      failed_when: false
+      register: result1
+
+    - name: Get all nodes
+      kubernetes.core.k8s_info:
+        api_version: v1
+        kind: Node
+      register: node_info
+
+    - name: Assert the number of workernode
+      ansible.builtin.assert:
+        that:
+          - node_info.resources | length == 2
+      register: result2
 
     - name: Notify to Teams
       uri:
@@ -20,5 +42,6 @@
         status_code: 202
         body_format: "json"
         body:
-          message: "message"
+          check1: "{{ result1.msg }}"
+          check2: "{{ result2.msg }}"
       register: result
