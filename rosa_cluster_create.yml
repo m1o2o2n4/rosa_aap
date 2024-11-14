@@ -19,13 +19,7 @@
       set_stats:
         data:
           api_url: "{{ result.api_url }}"
-          console_url: "{{ result.console_url }}"
-          username: "{{ result.username }}"
-          password: "{{ result.password }}"
-          display_name: "{{ result.display_name }}"
-          region: "{{ result.region }}"
-          openshift_version: "{{ result.openshift_version }}"
-          end_of_life_timestamp: "{{ result.end_of_life_timestamp }}"
+          api_token: "{{ result.api_token}}"
 
     - name: Notify to Teams
       uri:

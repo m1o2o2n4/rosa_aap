@@ -1,16 +1,24 @@
 - name: Notification
   hosts: localhost
   tasks:
+    - name: debug
+      ansible.builtin.debug:
+        msg:
+          api_url: "{{ api_url }}"
+          api_token: "{{ api_token }}"
+
+    - name: Parse JSON output to variables
+      set_stats:
+        data:
+          api_url: "{{ api_url }}"
+          api_token: "{{ api_token }}"
+
     - name: Notify to Teams
       uri:
         url: "https://prod-54.southeastasia.logic.azure.com:443/workflows/0734ebc58877417bbd89a4d96e6a5cc2/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=In2970iNhm0oLRIp5qA8jF4iVl19qjmRJktdtlSm1hY"
         method: POST
-        body_format: "json"
         status_code: 202
+        body_format: "json"
         body:
           message: "message"
       register: result
-
-    - name: debug
-      ansible.builtin.debug:
-        var: result
